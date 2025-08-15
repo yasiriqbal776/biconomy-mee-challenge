@@ -1,5 +1,7 @@
 # Biconomy MEE + Aave Supertransaction Demo
 
+> **Assignment Reference:** [Assignment Link](https://biconomy.notion.site/Typescript-Engineer-MEE-Task-1de75fdf326480028101d85caead3d49)
+
 This project demonstrates executing a **Fusion supertransaction** on a local Biconomy **Modular Execution Environment (MEE)** node, interacting with **Aave v3** on a **forked Ethereum mainnet**.
 
 It fulfills the hiring assignment by:
