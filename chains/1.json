@@ -1,0 +1,45 @@
+{
+  "name": "Ethereum",
+  "rpc": "http://anvil:8545",
+  "isTestChain": false,
+  "chainId": "1",
+  "type": "evm",
+  "eip1559": true,
+  "price": {
+    "chainId": "1",
+    "oracle": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+  },
+  "handleOpsDeposit": "1",
+  "paymentTokens": [
+    {
+      "name": "ETH",
+      "address": "0x0000000000000000000000000000000000000000",
+      "symbol": "ETH",
+      "decimals": 18,
+      "price": {
+        "chainId": "1",
+        "oracle": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+      }
+    },
+    {
+      "name": "Wrapped Ether",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "symbol": "WETH",
+      "decimals": 18,
+      "price": {
+        "chainId": "1",
+        "oracle": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+      }
+    },
+    {
+      "name": "USD Coin",
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "symbol": "USDC",
+      "decimals": 6,
+      "price": {
+        "value": "1",
+        "decimals": "0"
+      }
+    }
+  ]
+}

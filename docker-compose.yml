@@ -1,0 +1,94 @@
+name: mee-aave-demo
+
+services:
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:v1.0.0        # pin version, avoid :latest
+    entrypoint: ["anvil"]
+    command: [
+      "--fork-url","${MAINNET_RPC_URL}",
+      "--host","0.0.0.0",
+      "--port","8545",
+      "--chain-id","1",
+      "--steps-tracing",
+      "--block-time","5",
+      "--block-base-fee-per-gas","0"
+    ]
+    ports:
+      - "8545:8545"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "cast call 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 'symbol()(string)' --rpc-url http://localhost:8545 | grep -q USDC"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks: [ mee-local ]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --dir /data --save 60 1 --appendonly yes --loglevel warning
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [ mee-local ]
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  mee-node:
+    image: bcnmy/mee-node:1.1.94
+    environment:
+      KEY: ${PRIVATE_KEY}
+      PORT: ${MEE_PORT:-3000}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # DOCS_URL: https://documenter.getpostman.com/view/33713944/2sAYBd99Ec
+    ports:
+      - "${MEE_PORT:-3000}:3000"
+    depends_on:
+      anvil:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: on-failure
+    # If your chains/1.json points at the host's RPC, enable this:
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    volumes:
+      # Either bind a local folder with your chain configs...
+      - ./chains:/usr/src/app/chains           # must include 1.json (price feeds)
+      - mee-logs:/usr/src/app/logs
+      - mee-keystore:/usr/src/app/keystore
+    networks: [ mee-local ]
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:3000/v3/info >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  mee-local:
+    driver: bridge
+
+volumes:
+  redis-data:
+  mee-logs:
+  mee-keystore:

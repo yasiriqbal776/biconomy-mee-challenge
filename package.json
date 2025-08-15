@@ -1,0 +1,21 @@
+{
+  "name": "biconomy-mee-aave-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "mee:up": "docker compose -f docker-compose.yml up -d",
+    "mee:down": "docker compose -f docker-compose.yml down -v",
+    "demo": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@biconomy/abstractjs": "^1.1.0",
+    "dotenv": "^16.4.5",
+    "viem": "^2.19.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}
