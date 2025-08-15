@@ -2,7 +2,7 @@ name: mee-aave-demo
 
 services:
   anvil:
-    image: ghcr.io/foundry-rs/foundry:v1.0.0        # pin version, avoid :latest
+    image: ghcr.io/foundry-rs/foundry:v1.0.0
     entrypoint: ["anvil"]
     command: [
       "--fork-url","${MAINNET_RPC_URL}",
@@ -54,7 +54,6 @@ services:
       PORT: ${MEE_PORT:-3000}
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      # DOCS_URL: https://documenter.getpostman.com/view/33713944/2sAYBd99Ec
     ports:
       - "${MEE_PORT:-3000}:3000"
     depends_on:
@@ -63,12 +62,8 @@ services:
       redis:
         condition: service_healthy
     restart: on-failure
-    # If your chains/1.json points at the host's RPC, enable this:
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
     volumes:
-      # Either bind a local folder with your chain configs...
-      - ./chains:/usr/src/app/chains           # must include 1.json (price feeds)
+      - ./chains:/usr/src/app/chains
       - mee-logs:/usr/src/app/logs
       - mee-keystore:/usr/src/app/keystore
     networks: [ mee-local ]
